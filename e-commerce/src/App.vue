@@ -1,12 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-
 </script>
-
 <template>
-<div>This is my first VueJS Project</div>
+<div>This is my first VueJS .</div>
 </template>
-
 <style scoped>
 header {
   line-height: 1.5;
