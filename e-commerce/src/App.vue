@@ -144,6 +144,7 @@ export default {
       <Category v-for="product in this.Data_Contegory" :key="product.Title" :style="product.Style" :image="product.Img"
         :title="product.Title" :quantity="product.Quantity" />
 
+
     </div>
     <div class="Promotion_container">
       <Promotion v-for="promotion in Data_promotion" 
@@ -152,7 +153,6 @@ export default {
       :Image="promotion.promotion_image"
       :content="promotion.content"
       />
-
     </div>
   </main>
 
