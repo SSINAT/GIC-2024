@@ -11,6 +11,7 @@ import image7 from './assets/img/image7.png';
 import image8 from './assets/img/image8.png';
 import image9 from './assets/img/image9.png';
 import image10 from './assets/img/image10.png';
+
 import Csm_1 from './assets/img/Cms_1.jpg';
 import Csm_2 from './assets/img/Cms_2.png';
 import Csm_3 from './assets/img/Cms_3.jpg';
@@ -136,12 +137,8 @@ export default {
 
   },
 }
-
-
 </script>
-
 <template>
-
   <main class="main_content">
     <div class="category_container">
       <Category v-for="product in this.Data_Contegory" :key="product.Title" :style="product.Style" :image="product.Img"
@@ -157,7 +154,6 @@ export default {
       />
 
     </div>
-
   </main>
 
 </template>
