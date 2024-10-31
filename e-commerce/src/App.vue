@@ -168,18 +168,19 @@ export default {
 }
 
 .main_content .category_container {
-  gap: 1.2rem;
+  gap: 0.7rem;
   width: 100%;
   padding: 1rem;
-  display: grid;
+  display: flex;
   place-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 2fr));
   height: auto;
 }
 .main_content .Promotion_container{
   width: 96%;
+  gap: 0.7rem;
   height: auto;
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fit, minmax(27rem, 1fr));
   place-items: center;
   row-gap: 1rem;
