@@ -1,14 +1,20 @@
 <script>
+import Promotion from './Promotion.vue';
+
 
 export default {
     name: "Button_Component",
+    props:{
+        Promotion:Object,
+        ShopNow: Function,
+    },
 }
 
 </script>
 
 <template>
 
-    <button class="Btn">Shop Now
+    <button  @click="ShopNow(Promotion)" class="Btn">Shop Now
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_4059_3)">
                 <path
@@ -21,9 +27,8 @@ export default {
                 </clipPath>
             </defs>
         </svg>
-
-
     </button>
+    
 
 </template>
 
