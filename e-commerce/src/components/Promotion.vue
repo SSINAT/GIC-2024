@@ -8,7 +8,6 @@ export default {
         content : String,
         Image : String
     },
-
     components: {
         Button_Component,
     },
@@ -19,7 +18,6 @@ export default {
 
 }
 }
-
 </script>
 
 <template>
