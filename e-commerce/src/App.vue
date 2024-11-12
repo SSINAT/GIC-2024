@@ -1,6 +1,9 @@
 <script>
+
+import axios from "axios";
 import Category from './components/Category.vue';
 import Promotion from './components/Promotion.vue';
+
 import image1 from './assets/img/image1.png';
 import image2 from './assets/img/image2.png';
 import image3 from './assets/img/image3.png';
@@ -133,25 +136,59 @@ export default {
         },
       ],
     }
-
   },
+  methods: {
+    fetchCategories() {
+      axios
+        .get("http://localhost:3000/api/categories")
+        .then(response => {
+          this.categories = response.data;
+        })
+        .catch(error => {
+          console.error("Error fetching categories:", error);
+        });
+    },
+    fetchPromotions() {
+      axios
+        .get("http://localhost:3000/api/promotions")
+        .then(response => {
+          this.promotions = response.data;
+        })
+        .catch(error => {
+          console.error("Error fetching promotions:", error);
+        });
+    }
+  },
+  mounted() {
+    this.fetchCategories();
+    this.fetchPromotions();
+  }
+
+
 }
 </script>
 <template>
   <main class="main_content">
     <div class="category_container">
-      <Category v-for="product in this.Data_Contegory" :key="product.Title" :style="product.Style" :image="product.Img"
-        :title="product.Title" :quantity="product.Quantity" />
-        <button @click="shopNow(promotion)"></button>
+      <Category 
+      v-for="product in this.Data_Contegory" 
+      :key="product.Title" 
+      :style="product.Style" 
+      :image="product.Img"
+      :title="product.Title" 
+      :quantity="product.Quantity" />
+      <button @click="shopNow(promotion)"></button>
 
     </div>
     <div class="Promotion_container">
-      <Promotion v-for="promotion in Data_promotion" 
+      <Promotion 
+      v-for="promotion in Data_promotion" 
       :style="promotion.Style"
       :key="promotion.content"
       :Image="promotion.promotion_image"
       :content="promotion.content"
       />
+      <button @click="shopNow(promotion)"></button>
     </div>
   </main>
 
