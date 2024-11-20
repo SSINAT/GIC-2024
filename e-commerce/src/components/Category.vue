@@ -1,67 +1,37 @@
-<script>
-export default {
-    name : "Category",
-    props: {
-        image: {
-            type: String, 
-        },
-        title: {
-            type: String,
-        },
-        quantity: {
-            type: Number,
-          
-        },
-    },
-
-}
-
-</script>
-
 <template>
-    
-    <article class="each_category">
-        <img :src="image" alt="image">
-
-        <h4 class="title_product">
-            {{ title }}
-        </h4>
-        <span>{{ quantity }} Items</span>
-    </article>
-
-
-</template>
-
-<style>
-.each_category {
-    width: 8.25rem;
-    height: 10rem;
+    <div class="category_card" :style="style">
+      <img :src="image" :alt="title" />
+      <h3>{{ title }}</h3>
+      <p>{{ quantity }} items</p>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      image: String,
+      title: String,
+      quantity: Number,
+      style: Object,
+    },
+  };
+  </script>
+  
+  <style>
+  .category_card {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5rem;
-    border-radius: 0.45rem;
-    gap: 0.05rem;
-    box-shadow: 5px 5px 5px rgba(222, 222, 222, 0.1);
-    border: none;
-    
-}
-.each_category:hover{
-    border: 1.6px solid #81B13D;
-    outline: none; 
-}
-
-.each_category img {
-    width: 6rem;
-    height: 6rem;
-}
-
-.each_category span {
-    font-size: small;
-    color: rgb(124, 132, 138);
-}
-
-.each_category .title_product {
-    margin-top: 0.5rem;
-}
-</style>
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .category_card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+  </style>
+  

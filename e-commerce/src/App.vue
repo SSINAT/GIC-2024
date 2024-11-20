@@ -1,225 +1,50 @@
-<script>
-
-import axios from "axios";
-import Category from './components/Category.vue';
-import Promotion from './components/Promotion.vue';
-
-import image1 from './assets/img/image1.png';
-import image2 from './assets/img/image2.png';
-import image3 from './assets/img/image3.png';
-import image4 from './assets/img/image4.png';
-import image5 from './assets/img/image5.png';
-import image6 from './assets/img/image6.png';
-import image7 from './assets/img/image7.png';
-import image8 from './assets/img/image8.png';
-import image9 from './assets/img/image9.png';
-import image10 from './assets/img/image10.png';
-
-import Csm_1 from './assets/img/Cms_1.jpg';
-import Csm_2 from './assets/img/Cms_2.png';
-import Csm_3 from './assets/img/Cms_3.jpg';
-
-
-export default {
-  name: "App",
-  components: {
-    Category,
-    Promotion,
-  },
-  data() {
-    return {
-      Data_promotion: [
-        {
-          content : "Everyday Fresh & Clean with Our Products",
-          promotion_image : Csm_1,
-          Style : {
-            backgroundColor : "#F0E8D5",
-          }
-        },
-        {
-          content : "Make your Breakfast Healthy and Easy",
-          promotion_image : Csm_2,
-          Style : {
-            backgroundColor : "#F3E8E8",
-          }
-        },
-        {
-          content : "The best Organic Products Online",
-          promotion_image : Csm_3,
-          Style : {
-            backgroundColor : "rgb(229, 234, 239)",
-          }
-        },
-
-      ],
-      Data_Contegory: [
-        {
-          Img: image1,
-          Title: "Cake & Milk",
-          Quantity: 14,
-          Style: {
-            backgroundColor: '#F2FCE4',
-          }
-        },
-        {
-          Img: image2,
-          Title: "Peach",
-          Quantity: 17,
-          Style: {
-            backgroundColor: '#FFFCEB',
-          }
-        },
-        {
-          Img: image3,
-          Title: "Oganic Kiwi",
-          Quantity: 21,
-          Style: {
-            backgroundColor: '#ECFFEC',
-          }
-        },
-        {
-          Img: image4,
-          Title: "Red Apple",
-          Quantity: 68,
-          Style: {
-            backgroundColor: '#FEEFEA',
-          }
-        },
-        {
-          Img: image5,
-          Title: "Snack",
-          Quantity: 34,
-          Style: {
-            backgroundColor: '#FFF3EB',
-          }
-
-        },
-        {
-          Img: image6,
-          Title: "Black plum",
-          Quantity: 25,
-          Style: {
-            backgroundColor: '#FFF3FF',
-          }
-        },
-        {
-          Img: image7,
-          Title: "Vegetables",
-          Quantity: 65,
-          Style: {
-            backgroundColor: '#F2FCE4',
-          }
-        },
-        {
-          Img: image8,
-          Title: "Headphone",
-          Quantity: 33,
-          Style: {
-            backgroundColor: '#FFFCEB',
-          }
-        },
-        {
-          Img: image9,
-          Title: "Cake & Milk",
-          Quantity: 54,
-          Style: {
-            backgroundColor: '#F2FCE4',
-          }
-        },
-        {
-          Img: image10,
-          Title: "Orange",
-          Quantity: 63,
-          Style: {
-            backgroundColor: '#FFF3FF',
-          }
-        },
-      ],
-    }
-  },
-  methods: {
-    fetchCategories() {
-      axios
-        .get("http://localhost:3000/api/categories")
-        .then(response => {
-          this.categories = response.data;
-        })
-        .catch(error => {
-          console.error("Error fetching categories:", error);
-        });
-    },
-    fetchPromotions() {
-      axios
-        .get("http://localhost:3000/api/promotions")
-        .then(response => {
-          this.promotions = response.data;
-        })
-        .catch(error => {
-          console.error("Error fetching promotions:", error);
-        });
-    }
-  },
-  mounted() {
-    this.fetchCategories();
-    this.fetchPromotions();
-  }
-
-
-}
-</script>
 <template>
-  <main class="main_content">
+  <div>
     <div class="category_container">
-      <Category 
-      v-for="product in this.Data_Contegory" 
-      :key="product.Title" 
-      :style="product.Style" 
-      :image="product.Img"
-      :title="product.Title" 
-      :quantity="product.Quantity" />
-      <button @click="shopNow(promotion)"></button>
-
+      <div v-for="category in categories" :key="category.id">
+        <h3>{{ category.name }}</h3>
+        <ul>
+          <li v-for="product in getProductsByCategory(category.id)" :key="product.id">
+            {{ product.name }}
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="Promotion_container">
-      <Promotion 
-      v-for="promotion in Data_promotion" 
-      :style="promotion.Style"
-      :key="promotion.content"
-      :Image="promotion.promotion_image"
-      :content="promotion.content"
-      />
-      <button @click="shopNow(promotion)"></button>
-    </div>
-  </main>
 
+    <div class="popular_products_container">
+      <h3>Popular Products</h3>
+      <div v-for="product in popularProducts" :key="product.id">
+        <p>{{ product.name }} (Sold: {{ product.countSold }})</p>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style>
-.main_content {
-  min-height: 100vh;
-  padding-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+<script>
+import { useProductStore } from './stores/productStore'
+import { mapState } from 'pinia'
 
+export default {
+  name: 'App',
+  data() {
+    return {
+      currentGroupName: 'Group A'
+    }
+  },
+  computed: {
+    ...mapState(useProductStore, {
+      popularProducts: 'getPopularProducts',
+      categories(store) {
+        return this.$store.getCategoriesByGroup(this.currentGroupName)
+      },
+      getProductsByCategory(store) {
+        return store.getProductsByCategory
+      }
+    })
+  },
+  mounted() {
+    const store = useProductStore()
+    store.loadData()
+  }
 }
-
-.main_content .category_container {
-  gap: 1.2rem;
-  width: 100%;
-  padding: 1rem;
-  display: grid;
-  place-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
-  height: auto;
-}
-.main_content .Promotion_container{
-  width: 96%;
-  height: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(27rem, 1fr));
-  place-items: center;
-  row-gap: 1rem;
-}
-
-</style>
+</script>
