@@ -1,50 +1,49 @@
-
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { defineStore } from 'pinia';
 
 export const useProductStore = defineStore('product', {
   state: () => ({
-    groups: [],
-    promotions: [],
-    categories: [],
-    products: []
+    products: [
+      { id: 1, name: 'Product A', categoryId: 1, price: 100, description: 'Description A' },
+      { id: 2, name: 'Product B', categoryId: 2, price: 200, description: 'Description B' },
+    ],
+    categories: [
+      { id: 1, name: 'Category 1' },
+      { id: 2, name: 'Category 2' },
+    ],
   }),
   getters: {
- 
-    getCategoriesByGroup: (state) => {
-      return (groupName) => state.categories.filter(category => category.group === groupName)
+    getProductsByCategory: (state) => (categoryId) => {
+      return state.products.filter((product) => product.categoryId == categoryId);
     },
-
-    getProductsByGroup: (state) => {
-      return (groupName) => state.products.filter(product => product.group === groupName)
+    getProductById: (state) => (productId) => {
+      return state.products.find((product) => product.id == productId);
     },
-
-    getProductsByCategory: (state) => {
-      return (categoryId) => state.products.filter(product => product.categoryId === categoryId)
+    getCategoryById: (state) => (categoryId) => {
+      return state.categories.find((category) => category.id == categoryId);
     },
-
-    getPopularProducts: (state) => {
-      return state.products.filter(product => product.countSold > 10)
-    }
+    getPromotedProducts: (state) => {
+      return state.products.filter((product) => product.isPromoted);
+    },
   },
   actions: {
+    async fetchData() {
+      const categories = await fetch('http://localhost:3000/api/categories').then((res) =>
+        res.json()
+      );
+      const products = await fetch('http://localhost:3000/api/products').then((res) =>
+        res.json()
+      );
+      const groups = await fetch('http://localhost:3000/api/groups').then((res) =>
+        res.json()
+      );
+      const promotions = await fetch('http://localhost:3000/api/promotions').then((res) =>
+        res.json()
+      );
 
-    async loadData() {
-      try {
-        const [groupsResponse, promotionsResponse, categoriesResponse, productsResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/groups'),
-          axios.get('http://localhost:3000/api/promotions'),
-          axios.get('http://localhost:3000/api/categories'),
-          axios.get('http://localhost:3000/api/products')
-        ])
-
-        this.groups = groupsResponse.data
-        this.promotions = promotionsResponse.data
-        this.categories = categoriesResponse.data
-        this.products = productsResponse.data
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-  }
-})
+      this.categories = categories;
+      this.products = products;
+      this.groups = groups;
+      this.promotions = promotions;
+    },
+  },
+});
